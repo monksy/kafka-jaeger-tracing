@@ -16,7 +16,11 @@ libraryDependencies ++= Seq(
   // scala wrapper for kafka streams DSL:
   "org.apache.kafka" %% "kafka-streams-scala" % kafkaVer,
 
-// config
+  // Tracing libs
+  "io.opentracing.contrib" % "opentracing-kafka-streams" % "0.1.4",
+  "io.jaegertracing" % "jaeger-client" % "1.0.0",
+
+  // config
   "com.github.pureconfig" %% "pureconfig" % "0.9.1",
 
   // logging
@@ -33,7 +37,8 @@ mainClass in assembly := Some("com.monksy.kafka.added.WordCount")
 assemblyJarName in assembly := "kafka-streams-scala-adder.jar"
 
 // Some stuff to import in the console
-initialCommands in console := """
+initialCommands in console :=
+  """
   // project stuff
   import com.monksy.kafka.added._
 """

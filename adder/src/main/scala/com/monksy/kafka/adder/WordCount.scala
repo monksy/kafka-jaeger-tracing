@@ -3,13 +3,16 @@ package com.monksy.kafka.adder
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
+import io.jaegertracing.Configuration
+import io.opentracing.contrib.kafka.streams.TracingKafkaClientSupplier
+import io.opentracing.util.GlobalTracer
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.kstream.Printed
 import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala.Serdes._
 import org.apache.kafka.streams.scala.StreamsBuilder
-import org.apache.kafka.streams.scala.kstream.{ KStream, KTable }
-import org.apache.kafka.streams.{ KafkaStreams, StreamsConfig }
+import org.apache.kafka.streams.scala.kstream.{KStream, KTable}
 
 /**
   * A kafka streams application that reads records words from an input topic and counts the occurrence of each word
@@ -49,7 +52,21 @@ object WordCount extends App {
     builder
   }
 
-  val wordStream = new KafkaStreams(topology().build(), config)
+  import io.jaegertracing.Configuration.{ReporterConfiguration, SamplerConfiguration}
+  import org.apache.kafka.streams.KafkaStreams
+
+  val samplerConfig = SamplerConfiguration.fromEnv.withType("const").withParam(1)
+  val reporterConfig = ReporterConfiguration.fromEnv.withLogSpans(true)
+  val tconfig = new Configuration("WordCount").withSampler(samplerConfig).withReporter(reporterConfig)
+  val tracer =  tconfig.getTracer
+
+  // Optionally register tracer with GlobalTracer
+  GlobalTracer.register(tracer);
+  val supplier = new TracingKafkaClientSupplier(tracer)
+  //new Nothing(tracer)
+
+  // Provide supplier to KafkaStreams
+  val wordStream = new KafkaStreams(topology().build(), config, supplier)
   wordStream.start()
 
   // attach shutdown handler to catch control-c
