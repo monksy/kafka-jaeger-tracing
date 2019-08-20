@@ -1,7 +1,7 @@
 name := "wordcount"
 version := "0.1"
 organization := "com.monksy.kafka"
-scalaVersion := "2.12.0"
+scalaVersion := "2.12.9"
 
 
 // Always fork the jvm (test and run)
