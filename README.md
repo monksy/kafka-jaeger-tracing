@@ -31,11 +31,42 @@ sbt run
 
 
 
-## TODO 
+## How to run everything 
 
- * Write kafka data intializer 
- * Write topic creation script 
- * Word count processor 
- * Write Slow down Int to string 
+ * Start up kafka, zookeeper, jaeger with `./start.sh`
+ * Open up a few console windows to create the topics
+   * For the wordcount application 
+   ```shell script
+   kafka-console-consumer.sh \
+     --formatter kafka.tools.DefaultMessageFormatter \
+     --bootstrap-server localhost:9092 \
+     --from-beginning \
+     --topic wordcount-output \
+     --property print.key=true \
+     --property print.value=true \
+     --property value.deserializer=org.apache.kafka.common.serialization.LongDeserializer  \
+     --property key.separator="------"  
+       
+   ```
+   * For the wordcount processor application 
+   ```shell script
+   kafka-console-consumer.sh \
+        --formatter kafka.tools.DefaultMessageFormatter \
+        --bootstrap-server localhost:9092 \
+        --from-beginning \
+        --topic wordcountprocessor-output \ 
+        --property print.key=true \
+        --property print.value=true \
+        --property key.separator='------'   
+   ```
+ * Run both of the applications (word count and word count processor)
+ * Open up your browser for the Jaeger UI: http://localhost:16686/search
+
+   
+## Helpful Resources
+
+
+
+## TODO 
  * Configure tracing
 

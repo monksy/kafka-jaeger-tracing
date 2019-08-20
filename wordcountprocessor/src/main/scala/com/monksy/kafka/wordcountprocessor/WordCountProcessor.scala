@@ -39,7 +39,7 @@ object WordCountProcessor extends App {
   def topology(): StreamsBuilder = {
     val builder: StreamsBuilder = new StreamsBuilder
     val textLines =
-      builder.stream[String, Integer](StreamSettings.inputTopic)
+      builder.stream[String, Long](StreamSettings.inputTopic)
 
     val processed = textLines
         .map((k,v) => {
