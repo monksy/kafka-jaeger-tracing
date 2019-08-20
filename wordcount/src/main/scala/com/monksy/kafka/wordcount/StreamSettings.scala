@@ -1,4 +1,4 @@
-package com.monksy.kafka.adder
+package com.monksy.kafka.wordcount
 
 import com.typesafe.config.{ Config, ConfigFactory }
 

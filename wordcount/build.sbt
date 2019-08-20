@@ -1,4 +1,4 @@
-name := "adder"
+name := "wordcount"
 version := "0.1"
 organization := "com.monksy.kafka"
 scalaVersion := "2.12.0"
@@ -33,12 +33,12 @@ libraryDependencies ++= Seq(
 testOptions in Test += Tests.Argument("-oF")
 
 // Assembly stuff (for fat jar)
-mainClass in assembly := Some("com.monksy.kafka.added.WordCount")
-assemblyJarName in assembly := "kafka-streams-scala-adder.jar"
+mainClass in assembly := Some("com.monksy.kafka.wordcount.WordCount")
+assemblyJarName in assembly := "kafka-streams-scala-wordcount.jar"
 
 // Some stuff to import in the console
 initialCommands in console :=
   """
   // project stuff
-  import com.monksy.kafka.added._
+  import com.monksy.kafka.wordcount._
 """
