@@ -65,6 +65,7 @@ sbt run
    
 ## Helpful Resources
 
+  * [Object Partners: Kafka Tracing](https://www.youtube.com/watch?v=jom8HX6mG6g)
 
 
 ## TODO 
